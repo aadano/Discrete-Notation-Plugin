@@ -11,15 +11,15 @@ import sys
 #endregion
 #region SYMBOLS
 SYMBOLS = {
-    "Logic": ["∧", "∨", "¬", "→", "↔", "⊕", "↓"],
-    "Quantifiers": ["∀", "∃", "∄", "∴", "∵"],
-    "Set Theory": ["∈", "∉", "⊆", "⊂", "⊇", "⊃", "∪", "∩", "∅", "△", "×", "∁"],
-    "Relations": ["=", "≠", "≡", "≢", "≤", "≥", "≺", "≻", "∼", "≅", "∣", "∤"],
-    "Proof": ["⊢", "⊨", "⊥", "⊤", "□"],
-    "Number Sets": ["ℕ", "ℤ", "ℚ", "ℝ", "ℂ", "ℙ"],
-    "Functions": ["∘", "↦", "⌊", "⌋", "⌈", "⌉"],
-    "Arithmetic": ["·", "÷", "Σ", "Π", "√", "∞"],
-    "Combinatorics": ["!", "…"],
+    "Logic": ["∧ - and (conjunction)", "∨ - or (disjunction)", "¬ - not (negation)", "→ - implies (implication)", "↔ - if and only if (biconditional)", "⊕ - exclusive or (xor)", "↓ - nor (negation of or)", "↑ - nand (negation of and)"],
+    "Quantifiers": ["∀ - for all", "∃ - there exists", "∄ - there does not exist", "∴ - therefore", "∵ - because"],
+    "Set Theory": ["∈ - element of", "∉ - not element of", "⊆ - subset of", "⊂ - proper subset of", "⊇ - superset of", "⊃ - proper superset of", "∪ - union", "∩ - intersection", "∅ - empty set", "△ - symmetric difference", "× - Cartesian product", "∁ - complement"],
+    "Relations": ["= - equal to", "≠ - not equal to", "≡ - equivalent to", "≢ - not equivalent to", "≤ - less than or equal to", "≥ - greater than or equal to", "≺ - precedes", "≻ - succeeds", "∼ - similar to", "≅ - congruent to", "∣ - divides", "∤ - does not divide"],
+    "Proof": ["⊢ - proves", "⊨ - models", "⊥ - contradiction", "⊤ - tautology", "□ - necessarily"],
+    "Number Sets": ["ℕ - natural numbers", "ℤ - integers", "ℚ - rational numbers", "ℝ - real numbers", "ℂ - complex numbers", "ℙ - prime numbers"],
+    "Functions": ["∘ - composition", "↦ - maps to", "⌊ - floor", "⌋ - floor", "⌈ - ceiling", "⌉ - ceiling"],
+    "Arithmetic": ["· - multiplication", "÷ - division", "Σ - summation", "Π - product", "√ - square root", "∞ - infinity"],
+    "Combinatorics": ["! - factorial", "… - ellipsis"],
     "Presets": ["P(x)", "Q(x)", "R(x)", "∀x ∈ ℕ", "∃x ∈ ℕ", "∀x(P(x) → Q(x))", "∃x(P(x) ∧ Q(x))", "P(x) ∧ Q(x)", "P(x) ∨ Q(x)", "¬P(x)", "A ⊆ B", "A ∪ B", "A ∩ B", "f: A → B", "n ≡ k (mod m)", "∑ᵢ₌₁ⁿ", "n!"]
 }
 #endregion
@@ -36,7 +36,7 @@ class PopupWindow(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
         
-        controls = QLabel("W/S: navigate | Enter: select | Q: back/close")
+        controls = QLabel("W/S: navigate | E: select | Q: back/close")
         controls.setAlignment(Qt.AlignCenter)
         layout.addWidget(controls)
         
@@ -76,18 +76,19 @@ class PopupWindow(QWidget):
             else:
                 self.hide()
         
-        elif event.key() == Qt.Key_Return:
+        elif event.key() == Qt.Key_E:
             selected = self.list_widget.currentItem().text()
             
             if self.level == "categories":
                 self.show_symbols(selected)
             
             elif self.level == "symbols":
-                self.hide()
+                selected = self.list_widget.currentItem().text()
+                symbol_only = selected.split(" ")[0]
                 if previous_window:
                     previous_window.activate()
                 time.sleep(0.1)
-                pyperclip.copy(selected)
+                pyperclip.copy(symbol_only)
                 pyautogui.hotkey('ctrl', 'v')
         
         elif event.key() == Qt.Key_S:
@@ -111,8 +112,11 @@ def open_popup():
     previous_window = gw.getActiveWindow()
     window.show_categories()
     window.show()
+    window.setFocus()
     window.raise_()
     window.activateWindow()
+    window.setWindowFlags(window.windowFlags() | Qt.WindowStaysOnTopHint)
+    window.show()
 
 app = QApplication(sys.argv)
 window = PopupWindow()
