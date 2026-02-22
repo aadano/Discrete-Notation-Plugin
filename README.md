@@ -46,23 +46,18 @@ MathKey fixes this. One chord opens a keyboard-navigable popup. Two keys navigat
 
 **Requirements:** Python 3.8+, Windows
 
-**1. Clone the repo**
-```
-git clone https://github.com/yourusername/mathkey.git
-cd mathkey
-```
+1. Go to the [Releases](link to your releases page) page
+2. Download `MathKey.exe`
+3. Run it — no installation required
 
-**2. Install dependencies**
-```
-pip install pynput pyqt5 pygetwindow pyperclip pyautogui
-```
+> Windows may show a SmartScreen warning. Click "More info" then "Run anyway." 
+> The full source code is available above if you'd like to verify it yourself.
 
-**3. Run**
-```
-python main.py
-```
-
----
+### Option 2: Run from source
+1. Clone the repo
+2. Install Python 3.8+
+3. Run `python -m pip install pynput pyqt5 pygetwindow pyperclip pyautogui`
+4. Run `python main.py`
 
 ## Usage
 
