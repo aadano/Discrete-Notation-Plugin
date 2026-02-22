@@ -1,10 +1,10 @@
-**Important: Upon running the program, nothing will show up at first. Press Ctrl + Space to open the popup!**
-
 # MathKey ⌨️
 
 > A system-wide discrete math and logic symbol picker for Windows. Insert any symbol into any application in seconds — no LaTeX knowledge required.
 
 ---
+
+**Important: Upon running the program, nothing will show up at first. Press Ctrl + Space to open the popup!**
 
 ## The Problem
 
