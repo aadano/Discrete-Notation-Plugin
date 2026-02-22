@@ -69,8 +69,8 @@ python main.py
 | Open popup | Ctrl + Space |
 | Navigate down | S |
 | Navigate up | W |
-| Select / Enter category | Enter |
-| Go back to categories | Escape |
+| Select / Enter category | E |
+| Go back to categories | Escape/Q |
 | Close popup | Escape (from category level) |
 
 **Workflow:** Click into wherever you want to type → press Ctrl+Space → navigate to your symbol → press Enter → symbol appears.
