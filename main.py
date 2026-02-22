@@ -32,6 +32,7 @@ class PopupWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Math Keyboard")
         self.setFixedSize(300, 400)
+        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
         
         layout = QVBoxLayout()
         self.setLayout(layout)
@@ -78,7 +79,6 @@ class PopupWindow(QWidget):
         
         elif event.key() == Qt.Key_E:
             selected = self.list_widget.currentItem().text()
-            
             if self.level == "categories":
                 self.show_symbols(selected)
             
@@ -112,11 +112,10 @@ def open_popup():
     previous_window = gw.getActiveWindow()
     window.show_categories()
     window.show()
-    window.setFocus()
     window.raise_()
     window.activateWindow()
-    window.setWindowFlags(window.windowFlags() | Qt.WindowStaysOnTopHint)
-    window.show()
+    window.setFocus()
+    window.activateWindow()
 
 app = QApplication(sys.argv)
 window = PopupWindow()
