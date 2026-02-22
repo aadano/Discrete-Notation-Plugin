@@ -8,6 +8,7 @@ import pyperclip
 import pyautogui
 import time
 import sys
+import ctypes
 #endregion
 #region SYMBOLS
 SYMBOLS = {
@@ -111,11 +112,21 @@ def open_popup():
     global previous_window
     previous_window = gw.getActiveWindow()
     window.show_categories()
+    screen = QApplication.primaryScreen().geometry()
+    window.move(screen.width() - window.width() - 20, 20)
     window.show()
     window.raise_()
     window.activateWindow()
     window.setFocus()
-    window.activateWindow()
+    hwnd = int(window.winId())
+    foreground_thread = ctypes.windll.user32.GetWindowThreadProcessId(
+        ctypes.windll.user32.GetForegroundWindow(), None
+    )
+    current_thread = ctypes.windll.kernel32.GetCurrentThreadId()
+    ctypes.windll.user32.AttachThreadInput(foreground_thread, current_thread, True)
+    ctypes.windll.user32.SetForegroundWindow(hwnd)
+    ctypes.windll.user32.AttachThreadInput(foreground_thread, current_thread, False)
+    window.setFocus()
 
 app = QApplication(sys.argv)
 window = PopupWindow()
