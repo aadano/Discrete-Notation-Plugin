@@ -42,7 +42,7 @@ MathKey fixes this. One chord opens a keyboard-navigable popup. Two keys navigat
 
 ---
 
-## Installation (I will implement an easier method as I revisit this)
+## Installation
 
 **Requirements:** Python 3.8+, Windows
 
