@@ -23,6 +23,8 @@ SYMBOLS = {
     "Combinatorics": ["! - factorial", "… - ellipsis"],
     "Presets": ["P(x)", "Q(x)", "R(x)", "∀x ∈ ℕ", "∃x ∈ ℕ", "∀x(P(x) → Q(x))", "∃x(P(x) ∧ Q(x))", "P(x) ∧ Q(x)", "P(x) ∨ Q(x)", "¬P(x)", "A ⊆ B", "A ∪ B", "A ∩ B", "f: A → B", "n ≡ k (mod m)", "∑ᵢ₌₁ⁿ", "n!"]
 }
+# SYMBOLSFORAPPENDIX = 
+# SYMBOLSFOROTHERAPPENDIX = 
 #endregion
 #region FUNCTION
 class Communicator(QObject):
@@ -71,14 +73,35 @@ class PopupWindow(QWidget):
             self.list_widget.addItem(symbol)
         self.list_widget.setCurrentRow(0)
     
+    def show_appendix(self,category):
+        self.level = "appendix"
+        self.list_widget.clear()
+    def show_otherappendix(self,category):
+        self.level = "otherappendix"
+        self.list_widget.clear()
+    
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Q:
-            if self.level == "symbols":
+            if self.level == "symbols" or self.level == "appendix" or self.level == "otherappendix":
                 self.show_categories()
             else:
                 self.hide()
+
+        elif event.key() == Qt.Key_A:
+            if self.level == "categories":
+                selected = self.list_widget.currentItem().text()
+                self.show_otherappendix(selected)
+            elif self.level == "appendix":
+                self.show_categories()
+
+        elif event.key() == Qt.Key_D:
+            if self.level == "categories":
+                selected = self.list_widget.currentItem().text()
+                self.show_appendix(selected)
+            elif self.level == "otherappendix":
+                self.show_categories()
         
-        elif event.key() == Qt.Key_E:
+        elif event.key() == Qt.Key_E or event.key() == Qt.Key_Enter:
             selected = self.list_widget.currentItem().text()
             if self.level == "categories":
                 self.show_symbols(selected)
