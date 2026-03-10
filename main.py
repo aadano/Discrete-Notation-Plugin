@@ -23,6 +23,18 @@ SYMBOLS = {
     "Combinatorics": ["! - factorial", "… - ellipsis"],
     "Presets": ["P(x)", "Q(x)", "R(x)", "∀x ∈ ℕ", "∃x ∈ ℕ", "∀x(P(x) → Q(x))", "∃x(P(x) ∧ Q(x))", "P(x) ∧ Q(x)", "P(x) ∨ Q(x)", "¬P(x)", "A ⊆ B", "A ∪ B", "A ∩ B", "f: A → B", "n ≡ k (mod m)", "∑ᵢ₌₁ⁿ", "n!"]
 }
+SYMBOLSFORAPPENDIX = {
+    "Limits": ["lim - limit", "→ - approaches", "∞ - infinity", "lim⁺ - right-hand limit", "lim⁻ - left-hand limit", "∞⁺ - positive infinity", "∞⁻ - negative infinity", "≈ - approximately equal to", "∼ - asymptotically equal to", "o - little-o (grows slower than)", "O - big-O (grows no faster than)"],
+    "Derivatives": ["′ - prime (first derivative)", "″ - double prime (second derivative)", "‴ - triple prime (third derivative)", "∂ - partial derivative", "d - differential", "δ - variation / small change", "Δ - finite difference", "∇ - nabla / gradient", "D - differential operator", "df/dx - derivative of f w.r.t. x", "∂f/∂x - partial derivative of f w.r.t. x"],
+    "Integrals": ["∫ - integral", "∬ - double integral", "∭ - triple integral", "∮ - line integral (closed curve)", "∯ - surface integral (closed surface)", "∰ - volume integral", "⨌ - quadruple integral", "dx - differential element"],
+    "Series & Sequences": ["Σ - summation", "Π - product", "aₙ - sequence term", "Sₙ - partial sum", "R - radius of convergence"],
+    "Multivariable": ["∇ - gradient", "∇· - divergence", "∇× - curl", "∇² - Laplacian", "∂²f/∂x² - second partial derivative", "∂²f/∂x∂y - mixed partial derivative", "J - Jacobian", "H - Hessian"],
+    "Vector Calculus": ["· - dot product", "× - cross product", "‖ - norm / magnitude", "û - unit vector", "r⃗ - position vector", "F⃗ - vector field", "ds - arc length element", "dA - area element", "dV - volume element", "n̂ - outward unit normal"],
+    "Differential Equations": ["y′ - first derivative of y", "y″ - second derivative of y", "ẏ - time derivative (dot notation)", "ÿ - second time derivative", "λ - eigenvalue", "e - Euler's number", "W - Wronskian", "ℒ - Laplace transform", "ℱ - Fourier transform"],
+    "Special Functions": ["Γ - Gamma function", "Β - Beta function", "ζ - Zeta function", "erf - error function", "ln - natural logarithm", "log - logarithm", "sin - sine", "cos - cosine", "tan - tangent", "arcsin - inverse sine", "arccos - inverse cosine", "arctan - inverse tangent", "sinh - hyperbolic sine", "cosh - hyperbolic cosine", "tanh - hyperbolic tangent"],
+    "Number Sets": ["ℝ - real numbers", "ℂ - complex numbers", "ℝⁿ - n-dimensional real space", "ℝ² - 2D real plane", "ℝ³ - 3D real space", "i - imaginary unit", "π - pi", "e - Euler's number", "φ - golden ratio"],
+    "Presets": ["lim_{x→a} f(x)", "lim_{x→∞} f(x)", "lim_{x→0} (sin x)/x = 1", "f′(x) = lim_{h→0} (f(x+h)-f(x))/h", "∫ f(x) dx", "∫ₐᵇ f(x) dx", "∂f/∂x", "∂²f/∂x∂y", "∇f(x,y)", "∇·F⃗", "∇×F⃗", "∑ₙ₌₁^∞ aₙ", "∑ₙ₌₀^∞ xⁿ/n!", "f(x) = f(a) + f′(a)(x-a) + f″(a)(x-a)²/2! + …", "∫∫_D f(x,y) dA", "∮_C F⃗·dr⃗", "dy/dx + P(x)y = Q(x)"]
+}
 # SYMBOLSFORAPPENDIX = 
 # SYMBOLSFOROTHERAPPENDIX = 
 #endregion
@@ -40,7 +52,7 @@ class PopupWindow(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
         
-        controls = QLabel("W/S: navigate | E: select | Q: back/close")
+        controls = QLabel("WASD: navigate | E: select | Q: back/close")
         controls.setAlignment(Qt.AlignCenter)
         layout.addWidget(controls)
         
@@ -76,14 +88,29 @@ class PopupWindow(QWidget):
     def show_appendix(self,category):
         self.level = "appendix"
         self.list_widget.clear()
+        for category in SYMBOLSFORAPPENDIX.keys():
+            self.list_widget.addItem(category)
+        self.list_widget.setCurrentRow(0)
+    
+    def show_appendix_symbols(self, category):
+        self.level = "appendix_symbols"
+        self.current_category = category
+        self.list_widget.clear()
+        for symbol in SYMBOLSFORAPPENDIX[category]:
+            self.list_widget.addItem(symbol)
+        self.list_widget.setCurrentRow(0)
+        
     def show_otherappendix(self,category):
         self.level = "otherappendix"
         self.list_widget.clear()
     
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Q:
+            selected = self.list_widget.currentItem().text()
             if self.level == "symbols" or self.level == "appendix" or self.level == "otherappendix":
                 self.show_categories()
+            elif self.level == "appendix_symbols":
+                self.show_appendix(selected)
             else:
                 self.hide()
 
@@ -94,7 +121,7 @@ class PopupWindow(QWidget):
             elif self.level == "appendix":
                 self.show_categories()
 
-        elif event.key() == Qt.Key_D:
+        elif event.key() == Qt.Key_D or event.key() == Qt.Key_Q:
             if self.level == "categories":
                 selected = self.list_widget.currentItem().text()
                 self.show_appendix(selected)
@@ -105,7 +132,6 @@ class PopupWindow(QWidget):
             selected = self.list_widget.currentItem().text()
             if self.level == "categories":
                 self.show_symbols(selected)
-            
             elif self.level == "symbols":
                 selected = self.list_widget.currentItem().text()
                 symbol_only = selected.split(" ")[0]
@@ -114,7 +140,18 @@ class PopupWindow(QWidget):
                 time.sleep(0.1)
                 pyperclip.copy(symbol_only)
                 pyautogui.hotkey('ctrl', 'v')
-        
+            elif self.level == "appendix":
+                self.show_appendix_symbols(selected)
+            elif self.level == "appendix_symbols": 
+                selected = self.list_widget.currentItem().text()
+                symbol_only = selected.split(" ")[0]
+                if previous_window:
+                    previous_window.activate()
+                time.sleep(0.1)
+                pyperclip.copy(symbol_only)
+                pyautogui.hotkey('ctrl', 'v')
+            elif self.level == "otherappendix":      
+                pass   
         elif event.key() == Qt.Key_S:
             current = self.list_widget.currentRow()
             next_row = (current + 1) % self.list_widget.count()
