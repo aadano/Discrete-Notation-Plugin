@@ -6,14 +6,6 @@
 
 **Important: Upon running the program, nothing will show up at first. Press Ctrl + Space to open the popup!**
 
-## The Problem
-
-Typing discrete math symbols is a pain. You either need to memorize verbose LaTeX commands like `\leftrightarrow`, hunt through character maps, or copy-paste from a browser tab. None of these options are fast, and none of them work everywhere.
-
-MathKey fixes this. One chord opens a keyboard-navigable popup. Two keys navigate it. One key selects. The symbol appears wherever your cursor is — in Google Docs, Notepad, Word, a browser, anywhere.
-
----
-
 ## Features
 
 - **System-wide** — works in any application on Windows
